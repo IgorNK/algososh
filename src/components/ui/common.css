@@ -159,6 +159,14 @@ body {
   line-height: 13px;
 }
 
+.text_type_hint {
+  font-family: "Segue UI", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+}
+
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
