@@ -40,7 +40,7 @@ export const StringComponent: React.FC = () => {
           onClick={onReverseClick}
         />
       </div>
-      <div className={styles.solutionSection}>
+      <div>
         <StringReverse
           inputString={inputText}
           isStart={processingStarted}
