@@ -15,13 +15,11 @@ export const StringComponent: React.FC = () => {
   }, []);
 
   const onProcessingStart = () => {
-    console.log("set is processing");
     setIsProcessing(true);
     setProcessingStarted(false);
   };
 
   const onProcessingComplete = () => {
-    console.log("processing finished");
     setIsProcessing(false);
   };
 

@@ -24,18 +24,13 @@ export const StringReverse: React.FC<IStringReverseProps> = ({
   const [letters, setLetters] = React.useState<TLetter[]>([]);
 
   React.useEffect(() => {
-    const startAnimation = async () => {
-      if (onStart) onStart();
-      await runAnimation();
-      if (onComplete) onComplete();
-    };
-
+    console.log("start animation");
     if (isStart) startAnimation();
   }, [isStart]);
 
   React.useEffect(() => {
     if (!inputString) {
-      return;
+      setLetters([]);
     } else {
       setLetters(
         Array.from(inputString).map((char) => {
@@ -55,13 +50,62 @@ export const StringReverse: React.FC<IStringReverseProps> = ({
     );
   };
 
-  const runAnimation = async () => {
-    if (!inputString) {
-      return;
+  const startAnimation = async () => {
+    if (onStart) onStart();
+    let complete = false;
+    while (!complete) {
+      await delay();
+      complete = cycleReverse();
+      console.log(letters);
     }
-    let processedString = inputString.slice();
+    if (onComplete) onComplete();
+  };
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  const cycleReverse = () => {
+    const chars = letters.slice();
+    const { length } = chars;
+    let index = 0;
+    console.log(`from ${index} to ${length / 2}`);
+    while (index < length / 2) {
+      let firstIdx = index;
+      let lastIdx = length - 1 - index;
+      console.log(
+        `first index: ${firstIdx}:${chars[firstIdx].letter}, last index: ${lastIdx}:${chars[lastIdx].letter}`
+      );
+      if (chars[firstIdx].state === ElementStates.Modified) {
+        index++;
+        console.log(`already modified, iterating index: ${index}`);
+        continue;
+      }
+      if (chars[firstIdx].state === ElementStates.Changing) {
+        const temp = chars[lastIdx].letter;
+        console.log(
+          `swapping ${firstIdx}:${chars[firstIdx].letter} and ${lastIdx}:${chars[lastIdx].letter}`
+        );
+        chars[lastIdx].letter = chars[firstIdx].letter;
+        chars[firstIdx].letter = temp;
+        chars[firstIdx].state = ElementStates.Modified;
+        chars[lastIdx].state = ElementStates.Modified;
+        console.log(chars);
+        setLetters(chars);
+        return false;
+      }
+      if (chars[firstIdx].state === ElementStates.Default) {
+        chars[firstIdx].state = ElementStates.Changing;
+        chars[lastIdx].state = ElementStates.Changing;
+        setLetters(chars);
+        return false;
+      }
+    }
+    console.log(`complete`);
+    setLetters(chars);
+    return true;
+  };
+
+  const delay = async () => {
+    // console.log("Animation cycle");
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
   };
 
   return <div className={styles.letters}>{renderLetters(letters)}</div>;
