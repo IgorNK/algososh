@@ -9,9 +9,16 @@ export const FibonacciPage: React.FC = () => {
   const [inputText, setInputText] = React.useState("");
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [processingStarted, setProcessingStarted] = React.useState(false);
-  const onCalculateClick = () => { };
-  const onProcessingStart = () => { };
-  const onProcessingComplete = () => { };
+  const onCalculateClick = () => {
+    setProcessingStarted(true);
+  };
+  const onProcessingStart = () => {
+    setIsProcessing(true);
+    setProcessingStarted(false);
+  };
+  const onProcessingComplete = () => {
+    setIsProcessing(false);
+  };
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
@@ -33,7 +40,7 @@ export const FibonacciPage: React.FC = () => {
       </div>
       <div>
         <FibonacciSequence
-          inputAmount={inputText}
+          inputAmount={+inputText}
           isStart={processingStarted}
           onStart={onProcessingStart}
           onComplete={onProcessingComplete}

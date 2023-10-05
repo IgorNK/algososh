@@ -1,10 +1,14 @@
 .numbers {
-  margin-top: 120px;
+  margin-top: 48px;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  max-width: 944px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 48px;
 }
