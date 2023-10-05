@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./fibonacci-sequence.module.css";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/utils";
 
 interface IFibonacciSequenceProps {
   inputAmount: number;
@@ -43,7 +44,7 @@ export const FibonacciSequence: React.FC<IFibonacciSequenceProps> = ({
     let complete = false;
     let processedNums = [] as TNumber[];
     while (!complete) {
-      await delay();
+      await delay(500);
       const { nums, result } = cycleSequence(processedNums);
       processedNums = nums.slice();
       complete = result;
@@ -82,10 +83,6 @@ export const FibonacciSequence: React.FC<IFibonacciSequenceProps> = ({
       setNumbers(nums);
       return { nums: nums, result: false };
     }
-  };
-
-  const delay = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
   };
 
   return <div className={styles.numbers}>{renderNumbers(numbers)}</div>;

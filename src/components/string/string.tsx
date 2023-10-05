@@ -38,6 +38,7 @@ export const StringComponent: React.FC = () => {
           text="Развернуть"
           disabled={isProcessing}
           onClick={onReverseClick}
+          isLoader={isProcessing}
         />
       </div>
       <div>

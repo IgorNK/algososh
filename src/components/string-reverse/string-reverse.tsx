@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./string-reverse.module.css";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/utils";
 
 interface IStringReverseProps {
   inputString?: string;
@@ -54,7 +55,7 @@ export const StringReverse: React.FC<IStringReverseProps> = ({
     if (onStart) onStart();
     let complete = false;
     while (!complete) {
-      await delay();
+      await delay(500);
       complete = cycleReverse();
       console.log(letters);
     }
@@ -100,12 +101,6 @@ export const StringReverse: React.FC<IStringReverseProps> = ({
     console.log(`complete`);
     setLetters(chars);
     return true;
-  };
-
-  const delay = async () => {
-    // console.log("Animation cycle");
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
   };
 
   return <div className={styles.letters}>{renderLetters(letters)}</div>;
