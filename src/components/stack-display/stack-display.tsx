@@ -12,6 +12,7 @@ interface IStackDisplayProps {
 
 type TStackElement = {
   value: string;
+  index: number;
   state: ElementStates;
   top: boolean;
 };
@@ -52,6 +53,7 @@ export const StackDisplay = React.forwardRef(
           const last = index === stack.getSize() - 1;
           return {
             value: element,
+            index,
             state:
               changing && last ? ElementStates.Changing : ElementStates.Default,
             top: last ? true : false,
@@ -73,6 +75,7 @@ export const StackDisplay = React.forwardRef(
             return (
               <Circle
                 letter={element.value}
+                tail={`${element.index}`}
                 state={element.state}
                 head={element.top ? "top" : null}
               />
