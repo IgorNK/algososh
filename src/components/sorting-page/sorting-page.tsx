@@ -13,11 +13,15 @@ export const SortingPage: React.FC = () => {
   const [processingStarted, setProcessingStarted] = React.useState(false);
   const [values, setValues] = React.useState<number[]>([]);
   const [sortMethod, setSortMethod] = React.useState<SortMethod>(
-    SortMethod.Selection
+    SortMethod.Selection,
   );
   const [sortDirection, setSortDirection] = React.useState<Direction | null>(
-    null
+    null,
   );
+
+  React.useEffect(() => {
+    setValues(randomArr());
+  }, []);
 
   const onGenerateClick = () => {
     setValues(randomArr());
