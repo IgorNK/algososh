@@ -30,3 +30,5 @@
 Демонстрация работы структуры данных - Linked List
 
 ## Страница на github pages:
+
+[https://igornk.github.io/algososh](https://igornk.github.io/algososh)
