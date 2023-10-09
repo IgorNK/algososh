@@ -1,0 +1,43 @@
+.inputSection {
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
+  grid-template-areas:
+    "valueInput addHead addTail removeHead removeTail"
+    "indexInput addIndex addIndex removeIndex removeIndex";
+  column-gap: 12px;
+  row-gap: 12px;
+  max-width: 952px;
+}
+
+.valueInput {
+  grid-area: valueInput;
+}
+
+.addHead {
+  grid-area: addHead;
+}
+
+.addTail {
+  grid-area: addTail;
+}
+
+.removeHead {
+  grid-area: removeHead;
+}
+
+.removeTail {
+  grid-area: removeTail;
+}
+
+.indexInput {
+  grid-area: indexInput;
+}
+
+.addIndex {
+  grid-area: addIndex;
+}
+
+.removeIndex {
+  grid-area: removeIndex;
+}
