@@ -4,19 +4,21 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { StringReverse } from "../string-reverse/string-reverse";
+import { IStringReverseHandler } from "../../types/string";
 
 export const StringComponent: React.FC = () => {
   const [inputText, setInputText] = React.useState("");
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [processingStarted, setProcessingStarted] = React.useState(false);
+  const stringRef = React.useRef<IStringReverseHandler>(null);
 
   const onReverseClick = React.useCallback((e) => {
-    setProcessingStarted(true);
+    if (stringRef.current) {
+      stringRef.current.reverse();
+    }
   }, []);
 
   const onProcessingStart = () => {
     setIsProcessing(true);
-    setProcessingStarted(false);
   };
 
   const onProcessingComplete = () => {
@@ -24,7 +26,7 @@ export const StringComponent: React.FC = () => {
   };
 
   return (
-    <SolutionLayout title="Строка">
+    <SolutionLayout title='Строка'>
       <div className={styles.inputSection}>
         <Input
           maxLength={11}
@@ -35,7 +37,7 @@ export const StringComponent: React.FC = () => {
           }
         />
         <Button
-          text="Развернуть"
+          text='Развернуть'
           disabled={isProcessing}
           onClick={onReverseClick}
           isLoader={isProcessing}
@@ -44,9 +46,9 @@ export const StringComponent: React.FC = () => {
       <div>
         <StringReverse
           inputString={inputText}
-          isStart={processingStarted}
           onStart={onProcessingStart}
           onComplete={onProcessingComplete}
+          ref={stringRef}
         />
       </div>
     </SolutionLayout>

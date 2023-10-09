@@ -4,24 +4,28 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { FibonacciSequence } from "../fibonacci-sequence/fibonacci-sequence";
+import { IFibonacciSequenceHandler } from "../../types/fibonacci";
 
 export const FibonacciPage: React.FC = () => {
   const [inputText, setInputText] = React.useState("");
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [processingStarted, setProcessingStarted] = React.useState(false);
+  const fibRef = React.useRef<IFibonacciSequenceHandler>(null);
+
   const onCalculateClick = () => {
-    setProcessingStarted(true);
+    if (fibRef.current) {
+      fibRef.current.calculate();
+    }
   };
   const onProcessingStart = () => {
     setIsProcessing(true);
-    setProcessingStarted(false);
   };
   const onProcessingComplete = () => {
     setIsProcessing(false);
   };
 
   return (
-    <SolutionLayout title="Последовательность Фибоначчи">
+    <SolutionLayout title='Последовательность Фибоначчи'>
       <div className={styles.inputSection}>
         <Input
           type={"number"}
@@ -33,7 +37,7 @@ export const FibonacciPage: React.FC = () => {
           }
         />
         <Button
-          text="Рассчитать"
+          text='Рассчитать'
           disabled={isProcessing}
           isLoader={isProcessing}
           onClick={onCalculateClick}
@@ -42,9 +46,9 @@ export const FibonacciPage: React.FC = () => {
       <div>
         <FibonacciSequence
           inputAmount={+inputText}
-          isStart={processingStarted}
           onStart={onProcessingStart}
           onComplete={onProcessingComplete}
+          ref={fibRef}
         />
       </div>
     </SolutionLayout>

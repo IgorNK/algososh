@@ -1,10 +1,10 @@
 export interface ILinkedListDisplayHandler {
-  addHead: (item: string) => void;
-  addTail: (item: string) => void;
-  removeHead: () => void;
-  removeTail: () => void;
-  addAt: (item: string, index: number) => void;
-  removeAt: (index: number) => void;
+  addHead: (item: string) => Promise<void>;
+  addTail: (item: string) => Promise<void>;
+  removeHead: () => Promise<void>;
+  removeTail: () => Promise<void>;
+  addAt: (item: string, index: number) => Promise<void>;
+  removeAt: (index: number) => Promise<void>;
 }
 
 interface INode<T> {

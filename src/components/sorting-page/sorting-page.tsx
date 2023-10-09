@@ -5,19 +5,16 @@ import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
 import { SortingArray } from "../sorting-array/sorting-array";
 import { Direction } from "../../types/direction";
-import { SortMethod } from "../../types/sorting";
+import { SortMethod, ISortingArrayHandler } from "../../types/sorting";
 import { randomArr } from "../../utils/utils";
 
 export const SortingPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [processingStarted, setProcessingStarted] = React.useState(false);
   const [values, setValues] = React.useState<number[]>([]);
   const [sortMethod, setSortMethod] = React.useState<SortMethod>(
-    SortMethod.Selection,
+    SortMethod.Selection
   );
-  const [sortDirection, setSortDirection] = React.useState<Direction | null>(
-    null,
-  );
+  const sortRef = React.useRef<ISortingArrayHandler>(null);
 
   React.useEffect(() => {
     setValues(randomArr());
@@ -28,18 +25,19 @@ export const SortingPage: React.FC = () => {
   };
 
   const onSortAscendingClick = () => {
-    setSortDirection(Direction.Ascending);
-    setProcessingStarted(true);
+    if (sortRef.current) {
+      sortRef.current.sortAscending();
+    }
   };
 
   const onSortDescendingClick = () => {
-    setSortDirection(Direction.Descending);
-    setProcessingStarted(true);
+    if (sortRef.current) {
+      sortRef.current.sortDescending();
+    }
   };
 
   const onProcessingStart = () => {
     setIsProcessing(true);
-    setProcessingStarted(false);
   };
 
   const onProcessingComplete = () => {
@@ -47,7 +45,7 @@ export const SortingPage: React.FC = () => {
   };
 
   return (
-    <SolutionLayout title="Сортировка массива">
+    <SolutionLayout title='Сортировка массива'>
       <div className={styles.inputSection}>
         <RadioInput
           label={"Выбор"}
@@ -60,36 +58,35 @@ export const SortingPage: React.FC = () => {
           checked={sortMethod === SortMethod.Bubble}
           onChange={() => setSortMethod(SortMethod.Bubble)}
           disabled={isProcessing}
-          extraClass="ml-10 mr-1"
+          extraClass='ml-10 mr-1'
         />
         <Button
           text={"По возрастанию"}
           sorting={Direction.Ascending}
           onClick={onSortAscendingClick}
           disabled={isProcessing}
-          extraClass="ml-25"
+          extraClass='ml-25'
         />
         <Button
           text={"По убыванию"}
           sorting={Direction.Descending}
           onClick={onSortDescendingClick}
           disabled={isProcessing}
-          extraClass="ml-6 mr-20"
+          extraClass='ml-6 mr-20'
         />
         <Button
           text={"Новый массив"}
           onClick={onGenerateClick}
           disabled={isProcessing}
-          extraClass="ml-20"
+          extraClass='ml-20'
         />
       </div>
       <SortingArray
         inputValues={values}
-        isStart={processingStarted}
         sortMethod={sortMethod}
-        sortDirection={sortDirection}
         onStart={onProcessingStart}
         onComplete={onProcessingComplete}
+        ref={sortRef}
       />
     </SolutionLayout>
   );

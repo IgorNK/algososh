@@ -53,7 +53,7 @@ export const LinkedListDisplay = React.forwardRef(
       updateListElements(
         list,
         { value: item, index: 0, position: PassengerPosition.Head },
-        0
+        [0]
       );
       await delay(500);
       list.insertAtBeginning(item);
@@ -69,7 +69,7 @@ export const LinkedListDisplay = React.forwardRef(
       updateListElements(
         list,
         { value: item, index: lastIndex, position: PassengerPosition.Head },
-        lastIndex
+        [lastIndex]
       );
       await delay(500);
       list.insertAtEnd(item);
@@ -87,7 +87,7 @@ export const LinkedListDisplay = React.forwardRef(
         updateListElements(
           list,
           { value, index: 0, position: PassengerPosition.Tail },
-          0,
+          [0],
           undefined,
           0
         );
@@ -109,7 +109,7 @@ export const LinkedListDisplay = React.forwardRef(
         updateListElements(
           list,
           { value, index: lastIndex, position: PassengerPosition.Tail },
-          lastIndex,
+          [lastIndex],
           undefined,
           lastIndex
         );
@@ -124,57 +124,64 @@ export const LinkedListDisplay = React.forwardRef(
 
     const addAt = async (item: string, index: number) => {
       if (onStart) onStart();
+      for (let i = 0; i <= index; i++) {
+        if (i >= list.getSize()) {
+          break;
+        }
+        updateListElements(list, {
+          value: item,
+          index: i,
+          position: PassengerPosition.Tail,
+        });
+        await delay(500);
+      }
       list.insertAtIndex(item, index);
+      updateListElements(
+        list,
+        { value: item, index, position: PassengerPosition.Tail },
+        [index],
+        undefined,
+        index
+      );
+      await delay(500);
+      updateListElements(list, undefined, undefined, index);
+      await delay(500);
       updateListElements(list);
       if (onComplete) onComplete();
     };
 
     const removeAt = async (index: number) => {
-      console.log(`removing at ${index}`);
       if (onStart) onStart();
+      const deleted = list.getAtIndex(index);
+      const changing = [];
+      for (let i = 0; i <= index; i++) {
+        if (i >= list.getSize()) {
+          break;
+        }
+        changing.push(i);
+        updateListElements(list, undefined, changing);
+        await delay(500);
+      }
+      if (!deleted) {
+        return;
+      }
+      updateListElements(
+        list,
+        { value: deleted.value, index, position: PassengerPosition.Tail },
+        changing,
+        undefined,
+        index
+      );
+      await delay(500);
       list.removeAtIndex(index);
       updateListElements(list);
       if (onComplete) onComplete();
     };
 
-    // const enqueue = async (item: string) => {
-    //   if (onStart) onStart();
-    //   const position = (queue.getTail() + 1) % queueSize;
-    //   queueElements[position].state = ElementStates.Changing;
-    //   await delay(500);
-    //   queueElements[position].state = ElementStates.Default;
-    //   let newQueue = queue.copy();
-    //   try {
-    //     newQueue.enqueue(item);
-    //     setQueue(newQueue);
-    //     updateQueueElements(newQueue);
-    //   } catch {
-    //     console.log(`can't queue more elements`);
-    //   }
-    //   if (onComplete) onComplete();
-    // };
-    //
-    // const dequeue = async () => {
-    //   if (onStart) onStart();
-    //   const position = queue.getHead();
-    //   queueElements[position].state = ElementStates.Changing;
-    //   await delay(500);
-    //   queueElements[position].state = ElementStates.Default;
-    //   let newQueue = queue.copy();
-    //   try {
-    //     newQueue.dequeue();
-    //     setQueue(newQueue);
-    //     updateQueueElements(newQueue);
-    //   } catch {
-    //     console.log(`can't dequeue`);
-    //   }
-    //   if (onComplete) onComplete();
-    // };
-
     const updateListElements = (
       list: LinkedList<string>,
       passenger?: TPassengerElement,
-      changing?: number,
+      changing?: number[],
       modified?: number,
       empty?: number
     ) => {
@@ -183,7 +190,7 @@ export const LinkedListDisplay = React.forwardRef(
       setListElements(
         listArray.map((element, index) => {
           const state =
-            changing === index
+            changing !== undefined && index in changing
               ? ElementStates.Changing
               : modified === index
               ? ElementStates.Modified
@@ -194,17 +201,11 @@ export const LinkedListDisplay = React.forwardRef(
             index,
             state,
             head: index === 0 ? true : false,
-            tail: index === listArray.length - 1 ? true : false,
+            tail: index === length - 1 ? true : false,
           } as TLinkedListElement;
         })
       );
     };
-
-    // const clearQueue = () => {
-    //   let newQueue = new Queue<string>(queueSize);
-    //   setQueue(newQueue);
-    //   updateQueueElements(newQueue);
-    // };
 
     const renderListElements = (elements: TLinkedListElement[]) => {
       return (
