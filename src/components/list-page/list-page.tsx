@@ -12,24 +12,52 @@ export const ListPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const listRef = React.useRef<ILinkedListDisplayHandler>(null);
 
-  const onAddHeadClick = () => { };
+  const onAddHeadClick = () => {
+    if (listRef.current) {
+      listRef.current.addHead(inputValue);
+    }
+  };
 
-  const onAddTailClick = () => { };
+  const onAddTailClick = () => {
+    if (listRef.current) {
+      listRef.current.addTail(inputValue);
+    }
+  };
 
-  const onRemoveHeadClick = () => { };
+  const onRemoveHeadClick = () => {
+    if (listRef.current) {
+      listRef.current.removeHead();
+    }
+  };
 
-  const onRemoveTailClick = () => { };
+  const onRemoveTailClick = () => {
+    if (listRef.current) {
+      listRef.current.removeTail();
+    }
+  };
 
-  const onAddByIndexClick = () => { };
+  const onAddByIndexClick = () => {
+    if (listRef.current) {
+      listRef.current.addAt(inputValue, +inputIndex);
+    }
+  };
 
-  const onRemoveByIndexClick = () => { };
+  const onRemoveByIndexClick = () => {
+    if (listRef.current) {
+      listRef.current.removeAt(+inputIndex);
+    }
+  };
 
-  const onProcessingStart = () => { };
+  const onProcessingStart = () => {
+    setIsProcessing(true);
+  };
 
-  const onProcessingComplete = () => { };
+  const onProcessingComplete = () => {
+    setIsProcessing(false);
+  };
 
   return (
-    <SolutionLayout title="Связный список">
+    <SolutionLayout title='Связный список'>
       <div className={styles.inputSection}>
         <Input
           extraClass={styles.valueInput}
@@ -76,7 +104,7 @@ export const ListPage: React.FC = () => {
           placeholder={"Введите индекс"}
           disabled={isProcessing}
           onChange={(e: React.FormEvent<HTMLInputElement>) =>
-            setInputValue(e.currentTarget.value)
+            setInputIndex(e.currentTarget.value)
           }
         />
         <Button
