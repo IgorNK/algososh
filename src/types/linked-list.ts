@@ -15,7 +15,7 @@ interface INode<T> {
 export class Node<T> implements INode<T> {
   public next: Node<T> | null = null;
   public prev: Node<T> | null = null;
-  constructor(public value: T) {}
+  constructor(public value: T) { }
 }
 
 interface ILinkedList<T> {
@@ -83,16 +83,12 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
 
     const travelTo = (node: Node<T>, index: number): Node<T> | null => {
-      console.log(`travelling: index ${index}, value ${node.value}`);
       if (index === 0) {
-        console.log("reached the index");
         return node;
       }
       if (!node.next) {
-        console.log("no more nodes, returning null");
         return null;
       }
-      console.log("lets go to next");
       return travelTo(node.next, index - 1);
     };
 
@@ -105,14 +101,11 @@ export class LinkedList<T> implements ILinkedList<T> {
 
   deleteNode(node: Node<T>): void {
     if (!node.prev) {
-      console.log("delete node: this node is head!");
       this.head = node.next;
       if (this.head) {
         this.head.prev = null;
       }
     } else {
-      console.log("delete node: this node is not head.");
-      console.log(`node prev: ${node.prev.value}`);
       node.prev.next = node.next;
       if (node.next) {
         node.next.prev = node.prev;
@@ -123,10 +116,8 @@ export class LinkedList<T> implements ILinkedList<T> {
 
   removeAtBeginning() {
     if (!this.head) {
-      console.log("no head from list itself!");
       return;
     }
-    console.log("deleting from head");
     this.deleteNode(this.head);
   }
 
@@ -141,31 +132,18 @@ export class LinkedList<T> implements ILinkedList<T> {
   insertAtIndex(value: T, index: number) {
     const node = this.getAtIndex(index);
     if (!node) {
-      console.log("node of such index does not exist!");
       return null;
     }
     const replacement = new Node(value);
     if (node.prev) {
-      console.log(`fixing up previous node: ${node.prev.value}`);
       node.prev.next = replacement;
       replacement.prev = node.prev;
-      console.log(
-        `previous node's new next neighbour: ${node.prev.next.value}`
-      );
     } else {
       replacement.prev = null;
-      console.log(
-        "current occupant does not have a previous node, it must be head!"
-      );
     }
     replacement.next = node;
-    console.log(
-      `and the next node would be the past occupant: ${replacement.next.value}`
-    );
     node.prev = replacement;
-    console.log(
-      `fixing up current node's previous neighbour: ${node.prev.value}`
-    );
+    this.size++;
     return replacement;
   }
 

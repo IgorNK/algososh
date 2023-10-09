@@ -30,7 +30,7 @@ export const SortingArray = React.forwardRef(
         setNumbers(
           inputValues.map((value) => {
             return { index: value, state: ElementStates.Default } as TNumber;
-          })
+          }),
         );
       }
     }, [inputValues]);
@@ -55,7 +55,7 @@ export const SortingArray = React.forwardRef(
 
     const startAnimation = async (
       sortDirection: Direction,
-      sortMethod: SortMethod
+      sortMethod: SortMethod,
     ) => {
       resetNumbers();
       let complete = false;
@@ -74,7 +74,7 @@ export const SortingArray = React.forwardRef(
               sortDirection,
               prevStart,
               prevCmp,
-              currMaxInd
+              currMaxInd,
             );
           currMaxInd = maxInd;
           prevStart = currentStart;
@@ -87,7 +87,7 @@ export const SortingArray = React.forwardRef(
             processedNums,
             sortDirection,
             bubbleStart,
-            bubbleEnd
+            bubbleEnd,
           );
           processedNums = nums.slice();
           bubbleStart = start;
@@ -95,7 +95,6 @@ export const SortingArray = React.forwardRef(
           complete = result;
         }
         setNumbers(processedNums);
-        console.log(processedNums);
       }
     };
 
@@ -104,7 +103,7 @@ export const SortingArray = React.forwardRef(
       sortDirection: Direction,
       currentStart: number,
       currentCmp: number,
-      maxInd: number
+      maxInd: number,
     ): {
       nums: TNumber[];
       result: boolean;
@@ -116,16 +115,12 @@ export const SortingArray = React.forwardRef(
       let newStart = currentStart;
       let newCmp = currentCmp;
       let newMaxInd = maxInd;
-      console.log(
-        `start: ${newStart}, cmp: ${newCmp}, max: ${newMaxInd}:${nums[newMaxInd].index}`
-      );
 
       if (newCmp === newStart) {
         newCmp++;
       }
 
       if (newStart >= length - 1) {
-        console.log("start pointer reached the END");
         nums[newStart].state = ElementStates.Modified;
         return {
           nums,
@@ -137,7 +132,6 @@ export const SortingArray = React.forwardRef(
       }
 
       if (nums[newStart].state === ElementStates.Default) {
-        console.log(`coloring the new start at ${newStart}`);
         nums[newStart].state = ElementStates.Changing;
       }
 
@@ -147,10 +141,6 @@ export const SortingArray = React.forwardRef(
       }
 
       if (newCmp >= length) {
-        console.log("current pointer reached the end, iterating start.");
-        console.log(
-          `swapping start:${newStart}:${nums[newStart].index} and max:${newMaxInd}:${nums[newMaxInd].index}`
-        );
         swap(nums, newStart, newMaxInd);
         nums[newStart].state = ElementStates.Modified;
         newStart++;
@@ -205,12 +195,10 @@ export const SortingArray = React.forwardRef(
       nums: TNumber[],
       sortDirection: Direction,
       start: number,
-      end: number
+      end: number,
     ): { nums: TNumber[]; result: boolean; start: number; end: number } => {
-      let { length } = nums;
       let newStart = start;
       let newEnd = end;
-      console.log(`start: ${newStart}, end: ${newEnd}`);
       if (newEnd < 1) {
         nums[newEnd].state = ElementStates.Modified;
         return { nums, result: true, start: newStart, end: newEnd };
@@ -221,21 +209,11 @@ export const SortingArray = React.forwardRef(
 
       if (nums[newStart].index > nums[newStart + 1].index) {
         if (sortDirection === Direction.Ascending) {
-          console.log(
-            `swapping ${newStart}:${nums[newStart].index} and ${newStart + 1}:${
-              nums[newStart + 1].index
-            }`
-          );
           swap(nums, newStart, newStart + 1);
         }
       }
       if (nums[newStart].index < nums[newStart + 1].index) {
         if (sortDirection === Direction.Descending) {
-          console.log(
-            `swapping ${newStart}:${nums[newStart].index} and ${newStart + 1}:${
-              nums[newStart + 1].index
-            }`
-          );
           swap(nums, newStart, newStart + 1);
         }
       }
@@ -262,8 +240,14 @@ export const SortingArray = React.forwardRef(
     const renderColumns = () => {
       return (
         <>
-          {numbers.map((number) => {
-            return <Column index={number.index} state={number.state} />;
+          {numbers.map((number, index) => {
+            return (
+              <Column
+                key={`${number.index}-${index}-${number.state}`}
+                index={number.index}
+                state={number.state}
+              />
+            );
           })}
         </>
       );
@@ -275,5 +259,5 @@ export const SortingArray = React.forwardRef(
     }));
 
     return <div className={styles.columns}>{renderColumns()}</div>;
-  }
+  },
 );

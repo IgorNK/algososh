@@ -91,6 +91,7 @@ export const QueueDisplay = React.forwardRef(
           {elements.map((element) => {
             return (
               <Circle
+                key={`${element.value}-${element.index}-${element.head}-${element.tail}`}
                 letter={element.value}
                 state={element.state}
                 head={element.head ? "head" : null}

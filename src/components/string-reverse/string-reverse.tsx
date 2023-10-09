@@ -28,7 +28,7 @@ export const StringReverse = React.forwardRef(
         setLetters(
           Array.from(inputString).map((char) => {
             return { letter: char, state: ElementStates.Default } as TLetter;
-          })
+          }),
         );
       }
     }, [inputString]);
@@ -36,8 +36,14 @@ export const StringReverse = React.forwardRef(
     const renderLetters = (letters: TLetter[]) => {
       return (
         <>
-          {letters.map((char) => {
-            return <Circle letter={char.letter} state={char.state} />;
+          {letters.map((char, index) => {
+            return (
+              <Circle
+                key={`${char.letter}-${index}-${char.state}`}
+                letter={char.letter}
+                state={char.state}
+              />
+            );
           })}
         </>
       );
@@ -49,7 +55,6 @@ export const StringReverse = React.forwardRef(
       while (!complete) {
         await delay(500);
         complete = cycleReverse();
-        console.log(letters);
       }
       if (onComplete) onComplete();
     };
@@ -58,28 +63,19 @@ export const StringReverse = React.forwardRef(
       const chars = letters.slice();
       const { length } = chars;
       let index = 0;
-      console.log(`from ${index} to ${length / 2}`);
       while (index < length / 2) {
         let firstIdx = index;
         let lastIdx = length - 1 - index;
-        console.log(
-          `first index: ${firstIdx}:${chars[firstIdx].letter}, last index: ${lastIdx}:${chars[lastIdx].letter}`
-        );
         if (chars[firstIdx].state === ElementStates.Modified) {
           index++;
-          console.log(`already modified, iterating index: ${index}`);
           continue;
         }
         if (chars[firstIdx].state === ElementStates.Changing) {
           const temp = chars[lastIdx].letter;
-          console.log(
-            `swapping ${firstIdx}:${chars[firstIdx].letter} and ${lastIdx}:${chars[lastIdx].letter}`
-          );
           chars[lastIdx].letter = chars[firstIdx].letter;
           chars[firstIdx].letter = temp;
           chars[firstIdx].state = ElementStates.Modified;
           chars[lastIdx].state = ElementStates.Modified;
-          console.log(chars);
           setLetters(chars);
           return false;
         }
@@ -90,7 +86,6 @@ export const StringReverse = React.forwardRef(
           return false;
         }
       }
-      console.log(`complete`);
       setLetters(chars);
       return true;
     };
@@ -100,5 +95,5 @@ export const StringReverse = React.forwardRef(
     }));
 
     return <div className={styles.letters}>{renderLetters(letters)}</div>;
-  }
+  },
 );

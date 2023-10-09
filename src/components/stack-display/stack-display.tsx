@@ -74,6 +74,7 @@ export const StackDisplay = React.forwardRef(
           {elements.map((element) => {
             return (
               <Circle
+                key={`${element.value}-${element.index}-${element.top}`}
                 letter={element.value}
                 index={element.index}
                 state={element.state}

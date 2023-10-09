@@ -34,7 +34,7 @@ type TPassengerElement = {
 export const LinkedListDisplay = React.forwardRef(
   (
     props: ILinkedListDisplayProps,
-    ref: React.Ref<ILinkedListDisplayHandler>
+    ref: React.Ref<ILinkedListDisplayHandler>,
   ) => {
     const [listElements, setListElements] = React.useState<
       TLinkedListElement[]
@@ -53,7 +53,7 @@ export const LinkedListDisplay = React.forwardRef(
       updateListElements(
         list,
         { value: item, index: 0, position: PassengerPosition.Head },
-        [0]
+        [0],
       );
       await delay(500);
       list.insertAtBeginning(item);
@@ -69,7 +69,7 @@ export const LinkedListDisplay = React.forwardRef(
       updateListElements(
         list,
         { value: item, index: lastIndex, position: PassengerPosition.Head },
-        [lastIndex]
+        [lastIndex],
       );
       await delay(500);
       list.insertAtEnd(item);
@@ -89,13 +89,11 @@ export const LinkedListDisplay = React.forwardRef(
           { value, index: 0, position: PassengerPosition.Tail },
           [0],
           undefined,
-          0
+          0,
         );
         await delay(500);
         list.removeAtBeginning();
         updateListElements(list);
-      } else {
-        console.log("No head!");
       }
       if (onComplete) onComplete();
     };
@@ -111,13 +109,11 @@ export const LinkedListDisplay = React.forwardRef(
           { value, index: lastIndex, position: PassengerPosition.Tail },
           [lastIndex],
           undefined,
-          lastIndex
+          lastIndex,
         );
         await delay(500);
         list.removeAtEnd();
         updateListElements(list);
-      } else {
-        console.log("No tail!");
       }
       if (onComplete) onComplete();
     };
@@ -141,7 +137,7 @@ export const LinkedListDisplay = React.forwardRef(
         { value: item, index, position: PassengerPosition.Tail },
         [index],
         undefined,
-        index
+        index,
       );
       await delay(500);
       updateListElements(list, undefined, undefined, index);
@@ -170,7 +166,7 @@ export const LinkedListDisplay = React.forwardRef(
         { value: deleted.value, index, position: PassengerPosition.Tail },
         changing,
         undefined,
-        index
+        index,
       );
       await delay(500);
       list.removeAtIndex(index);
@@ -183,18 +179,18 @@ export const LinkedListDisplay = React.forwardRef(
       passenger?: TPassengerElement,
       changing?: number[],
       modified?: number,
-      empty?: number
+      empty?: number,
     ) => {
       const listArray = list.toArray();
       const length = listArray.length;
       setListElements(
         listArray.map((element, index) => {
           const state =
-            changing !== undefined && index in changing
+            changing !== undefined && changing.includes(index)
               ? ElementStates.Changing
               : modified === index
-              ? ElementStates.Modified
-              : ElementStates.Default;
+                ? ElementStates.Modified
+                : ElementStates.Default;
           return {
             value: index !== empty ? element : "",
             passenger: passenger,
@@ -203,7 +199,7 @@ export const LinkedListDisplay = React.forwardRef(
             head: index === 0 ? true : false,
             tail: index === length - 1 ? true : false,
           } as TLinkedListElement;
-        })
+        }),
       );
     };
 
@@ -223,30 +219,33 @@ export const LinkedListDisplay = React.forwardRef(
               );
             }
             return (
-              <>
+              <div
+                className={styles.listElement}
+                key={`${element.value}-${element.index}`}
+              >
                 <Circle
                   letter={element.value}
                   state={element.state}
                   head={
                     passenger !== null &&
-                    element.passenger.position === PassengerPosition.Head
+                      element.passenger.position === PassengerPosition.Head
                       ? passenger
                       : element.head
-                      ? "head"
-                      : null
+                        ? "head"
+                        : null
                   }
                   tail={
                     passenger !== null &&
-                    element.passenger.position === PassengerPosition.Tail
+                      element.passenger.position === PassengerPosition.Tail
                       ? passenger
                       : element.tail
-                      ? "tail"
-                      : null
+                        ? "tail"
+                        : null
                   }
                   index={element.index}
                 />
                 {!isLast ? <ArrowIcon /> : null}
-              </>
+              </div>
             );
           })}
         </>
@@ -265,5 +264,5 @@ export const LinkedListDisplay = React.forwardRef(
     return (
       <div className={styles.list}>{renderListElements(listElements)}</div>
     );
-  }
+  },
 );

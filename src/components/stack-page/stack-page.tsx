@@ -11,11 +11,15 @@ export const StackPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const stackRef = React.useRef<IStackDisplayHandler>(null);
 
-  const onAddClick = React.useCallback(() => {
-    if (stackRef.current) {
-      stackRef.current.addToStack(inputText);
-    }
-  }, [stackRef, inputText]);
+  const onAddClick = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (stackRef.current) {
+        stackRef.current.addToStack(inputText);
+      }
+    },
+    [stackRef, inputText],
+  );
 
   const onDeleteClick = React.useCallback(() => {
     if (stackRef.current) {
@@ -41,7 +45,7 @@ export const StackPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <div className={styles.inputSection}>
+      <form className={styles.inputSection} onSubmit={onAddClick}>
         <Input
           maxLength={4}
           isLimitText={true}
@@ -71,7 +75,7 @@ export const StackPage: React.FC = () => {
           isLoader={isProcessing}
           extraClass="ml-20"
         />
-      </div>
+      </form>
       <StackDisplay
         onStart={onProcessingStart}
         onComplete={onProcessingComplete}

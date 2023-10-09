@@ -12,7 +12,8 @@ export const ListPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const listRef = React.useRef<ILinkedListDisplayHandler>(null);
 
-  const onAddHeadClick = () => {
+  const onAddHeadClick = (e: React.FormEvent) => {
+    e.preventDefault();
     if (listRef.current) {
       listRef.current.addHead(inputValue);
     }
@@ -57,8 +58,8 @@ export const ListPage: React.FC = () => {
   };
 
   return (
-    <SolutionLayout title='Связный список'>
-      <div className={styles.inputSection}>
+    <SolutionLayout title="Связный список">
+      <form className={styles.inputSection} onSubmit={onAddHeadClick}>
         <Input
           extraClass={styles.valueInput}
           maxLength={4}
@@ -121,7 +122,7 @@ export const ListPage: React.FC = () => {
           disabled={isProcessing}
           isLoader={isProcessing}
         />
-      </div>
+      </form>
       <LinkedListDisplay
         onStart={onProcessingStart}
         onComplete={onProcessingComplete}

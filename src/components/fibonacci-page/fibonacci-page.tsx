@@ -9,10 +9,10 @@ import { IFibonacciSequenceHandler } from "../../types/fibonacci";
 export const FibonacciPage: React.FC = () => {
   const [inputText, setInputText] = React.useState("");
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [processingStarted, setProcessingStarted] = React.useState(false);
   const fibRef = React.useRef<IFibonacciSequenceHandler>(null);
 
-  const onCalculateClick = () => {
+  const onCalculateClick = (e: React.FormEvent) => {
+    e.preventDefault();
     if (fibRef.current) {
       fibRef.current.calculate();
     }
@@ -25,24 +25,31 @@ export const FibonacciPage: React.FC = () => {
   };
 
   return (
-    <SolutionLayout title='Последовательность Фибоначчи'>
-      <div className={styles.inputSection}>
+    <SolutionLayout title="Последовательность Фибоначчи">
+      <form className={styles.inputSection} onSubmit={onCalculateClick}>
         <Input
           type={"number"}
           max={19}
           isLimitText={true}
           disabled={isProcessing}
-          onChange={(e: React.FormEvent<HTMLInputElement>) =>
-            setInputText(e.currentTarget.value)
-          }
+          onChange={(e: React.FormEvent<HTMLInputElement>) => {
+            let value = e.currentTarget.value;
+            if (+value > 19) {
+              value = "19";
+            }
+            if (+value < 0) {
+              value = "0";
+            }
+            setInputText(value);
+          }}
         />
         <Button
-          text='Рассчитать'
+          text="Рассчитать"
           disabled={isProcessing}
           isLoader={isProcessing}
           onClick={onCalculateClick}
         />
-      </div>
+      </form>
       <div>
         <FibonacciSequence
           inputAmount={+inputText}

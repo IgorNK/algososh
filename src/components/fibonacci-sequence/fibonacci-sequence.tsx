@@ -18,7 +18,7 @@ type TNumber = {
 export const FibonacciSequence = React.forwardRef(
   (
     props: IFibonacciSequenceProps,
-    ref: React.Ref<IFibonacciSequenceHandler>
+    ref: React.Ref<IFibonacciSequenceHandler>,
   ) => {
     const { inputAmount, onStart, onComplete } = props;
     const [numbers, setNumbers] = React.useState<TNumber[]>([]);
@@ -26,8 +26,14 @@ export const FibonacciSequence = React.forwardRef(
     const renderNumbers = (numbers: TNumber[]) => {
       return (
         <>
-          {numbers.map((char) => {
-            return <Circle letter={`${char.number}`} tail={`${char.tail}`} />;
+          {numbers.map((char, index) => {
+            return (
+              <Circle
+                key={`${char.number}-${index}-${char.tail}`}
+                letter={`${char.number}`}
+                tail={`${char.tail}`}
+              />
+            );
           })}
         </>
       );
@@ -43,37 +49,27 @@ export const FibonacciSequence = React.forwardRef(
         processedNums = nums.slice();
         complete = result;
         setNumbers(processedNums);
-        console.log(processedNums);
       }
       if (onComplete) onComplete();
     };
 
     const cycleSequence = (
-      nums: TNumber[]
+      nums: TNumber[],
     ): { nums: TNumber[]; result: boolean } => {
-      console.log("nums at start:");
-      console.log(nums);
       const { length } = nums;
-      console.log(`length: ${length}`);
       if (length < 2) {
         const newNumber = { number: 1, tail: length } as TNumber;
-        console.log(`number: 1, tail: ${length}`);
         nums.push(newNumber);
       } else {
         const newNumber = {
           number: nums[length - 2].number + nums[length - 1].number,
           tail: length,
         } as TNumber;
-        console.log(`number: ${newNumber.number}, tail: ${length}`);
         nums.push(newNumber);
       }
       if (length === inputAmount) {
-        console.log("done, nums on end:");
-        console.log(nums);
         return { nums: nums, result: true };
       } else {
-        console.log("next, nums on end:");
-        console.log(nums);
         setNumbers(nums);
         return { nums: nums, result: false };
       }
@@ -84,5 +80,5 @@ export const FibonacciSequence = React.forwardRef(
     }));
 
     return <div className={styles.numbers}>{renderNumbers(numbers)}</div>;
-  }
+  },
 );

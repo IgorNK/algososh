@@ -23,25 +23,19 @@ export class Queue<T> implements IQueue<T> {
   private length: number = 0;
 
   constructor(size: number) {
-    console.log(`creating queue with size: ${size}`);
     this.size = size;
     this.items = Array(size);
     this.tail = size - 1;
   }
 
   enqueue(item: T) {
-    console.log(`length: ${this.length}, size: ${this.size}`);
     if (this.length >= this.size) {
       throw new Error("Maximum length exceeded");
     }
     const position = (this.tail + 1) % this.size;
-    console.log(`queueing in position: ${position}`);
     this.items[position] = item;
     this.tail = position;
     this.length++;
-    console.log(
-      `head: ${this.head}, tail: ${this.tail}, length: ${this.length}`,
-    );
   }
 
   dequeue() {
@@ -52,9 +46,7 @@ export class Queue<T> implements IQueue<T> {
     const item = this.items[this.head];
     this.items[this.head] = null;
     this.head = (this.head + 1) % this.size;
-    console.log(`this.head + 1: ${this.head + 1}, size: ${this.size}`);
     this.length--;
-    console.log(`head: ${this.head}, tail: ${this.tail}`);
     return item;
   }
 

@@ -11,11 +11,15 @@ export const QueuePage: React.FC = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const queueRef = React.useRef<IQueueDisplayHandler>(null);
 
-  const onAddClick = React.useCallback(() => {
-    if (queueRef.current) {
-      queueRef.current.enqueue(inputText);
-    }
-  }, [queueRef, inputText]);
+  const onAddClick = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (queueRef.current) {
+        queueRef.current.enqueue(inputText);
+      }
+    },
+    [queueRef, inputText],
+  );
 
   const onDeleteClick = React.useCallback(() => {
     if (queueRef.current) {
@@ -39,7 +43,7 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <div className={styles.inputSection}>
+      <form className={styles.inputSection} onSubmit={onAddClick}>
         <Input
           maxLength={4}
           isLimitText={true}
@@ -69,7 +73,7 @@ export const QueuePage: React.FC = () => {
           isLoader={isProcessing}
           extraClass="ml-20"
         />
-      </div>
+      </form>
       <QueueDisplay
         onStart={onProcessingStart}
         onComplete={onProcessingComplete}
