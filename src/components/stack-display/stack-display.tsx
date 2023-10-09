@@ -39,10 +39,10 @@ export const StackDisplay = React.forwardRef(
     const popFromStack = async () => {
       if (onStart) onStart();
       let newStack = stack.copy();
-      newStack.pop();
-      setStack(newStack);
       updateStackElements(newStack, true);
       await delay(500);
+      newStack.pop();
+      setStack(newStack);
       updateStackElements(newStack, false);
       if (onComplete) onComplete();
     };
@@ -75,7 +75,7 @@ export const StackDisplay = React.forwardRef(
             return (
               <Circle
                 letter={element.value}
-                tail={`${element.index}`}
+                index={element.index}
                 state={element.state}
                 head={element.top ? "top" : null}
               />

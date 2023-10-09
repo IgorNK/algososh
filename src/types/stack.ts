@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface IStackDisplayHandler {
   addToStack: (item: string) => void;
   popFromStack: () => void;
@@ -18,6 +16,10 @@ interface IStack<T> {
 
 export class Stack<T> implements IStack<T> {
   private items: T[] = [];
+
+  constructor() {
+    console.log("creating new stack");
+  }
 
   push(item: T) {
     this.items.push(item);

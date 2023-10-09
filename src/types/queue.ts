@@ -1,29 +1,46 @@
+export interface IQueueDisplayHandler {
+  enqueue: (item: string) => void;
+  dequeue: () => void;
+  clearQueue: () => void;
+}
+
 interface IQueue<T> {
   enqueue: (item: T) => void;
   dequeue: () => T | null;
   peek: () => T | null;
+  copy: () => IQueue<T>;
+  isEmpty: () => boolean;
+  getHead: () => number;
+  getTail: () => number;
+  toArray: () => (T | null)[];
 }
 
-export default class Queue<T> implements IQueue<T> {
+export class Queue<T> implements IQueue<T> {
   private items: (T | null)[] = [];
   private head = 0;
-  private tail = 0;
+  private tail = -1;
   private readonly size: number = 0;
   private length: number = 0;
 
   constructor(size: number) {
+    console.log(`creating queue with size: ${size}`);
     this.size = size;
     this.items = Array(size);
   }
 
   enqueue(item: T) {
+    console.log(`length: ${this.length}, size: ${this.size}`);
     if (this.length >= this.size) {
       throw new Error("Maximum length exceeded");
     }
-
-    this.items[this.tail] = item;
-    this.tail = (this.tail + 1) % this.size;
+    const position = (this.tail + 1) % this.size;
+    console.log(`queueing in position: ${position}`);
+    this.items[position] = item;
+    this.tail = position;
     this.length++;
+    console.log(
+      `head: ${this.head}, tail: ${this.tail}, length: ${this.length}`,
+    );
   }
 
   dequeue() {
@@ -33,8 +50,10 @@ export default class Queue<T> implements IQueue<T> {
 
     const item = this.items[this.head];
     this.items[this.head] = null;
-    this.head = (this.head + 1) & this.size;
+    this.head = (this.head + 1) % this.size;
+    console.log(`this.head + 1: ${this.head + 1}, size: ${this.size}`);
     this.length--;
+    console.log(`head: ${this.head}, tail: ${this.tail}`);
     return item;
   }
 
@@ -47,5 +66,26 @@ export default class Queue<T> implements IQueue<T> {
 
   isEmpty() {
     return this.length === 0;
+  }
+
+  getHead() {
+    return this.head;
+  }
+
+  getTail() {
+    return this.tail;
+  }
+
+  copy() {
+    const newQueue = new Queue<T>(this.size);
+    newQueue.items = this.items.slice();
+    newQueue.head = this.head;
+    newQueue.tail = this.tail;
+    newQueue.length = this.length;
+    return newQueue;
+  }
+
+  toArray() {
+    return this.items.slice();
   }
 }
