@@ -27,12 +27,16 @@ export const QueueDisplay = React.forwardRef(
     const [queue, setQueue] = React.useState(new Queue<string>(queueSize));
     const { onStart, onComplete } = props;
 
-    // React.useEffect(() => {
-    //   updateQueueElements(queue);
-    // }, [queue]);
+    React.useEffect(() => {
+      updateQueueElements(queue);
+    }, []);
 
     const enqueue = async (item: string) => {
       if (onStart) onStart();
+      const position = (queue.getTail() + 1) % queueSize;
+      queueElements[position].state = ElementStates.Changing;
+      await delay(500);
+      queueElements[position].state = ElementStates.Default;
       let newQueue = queue.copy();
       try {
         newQueue.enqueue(item);
@@ -41,14 +45,16 @@ export const QueueDisplay = React.forwardRef(
       } catch {
         console.log(`can't queue more elements`);
       }
-      await delay(500);
       if (onComplete) onComplete();
     };
 
     const dequeue = async () => {
       if (onStart) onStart();
-      let newQueue = queue.copy();
+      const position = queue.getHead();
+      queueElements[position].state = ElementStates.Changing;
       await delay(500);
+      queueElements[position].state = ElementStates.Default;
+      let newQueue = queue.copy();
       try {
         newQueue.dequeue();
         setQueue(newQueue);
@@ -58,13 +64,6 @@ export const QueueDisplay = React.forwardRef(
       }
       if (onComplete) onComplete();
     };
-
-    // const updateQueueElements = (queue: Queue<string>) => {
-    //   const newElements: TQueueElement[] = [];
-    //   for (let i = 0; i < queueSize; i++) {
-    //
-    //   }
-    // }
 
     const updateQueueElements = (queue: Queue<string>) => {
       setQueueElements(
@@ -83,7 +82,7 @@ export const QueueDisplay = React.forwardRef(
     const clearQueue = () => {
       let newQueue = new Queue<string>(queueSize);
       setQueue(newQueue);
-      setQueueElements([]);
+      updateQueueElements(newQueue);
     };
 
     const renderQueueElements = (elements: TQueueElement[]) => {

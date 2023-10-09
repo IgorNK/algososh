@@ -26,6 +26,7 @@ export class Queue<T> implements IQueue<T> {
     console.log(`creating queue with size: ${size}`);
     this.size = size;
     this.items = Array(size);
+    this.tail = size - 1;
   }
 
   enqueue(item: T) {
@@ -86,6 +87,15 @@ export class Queue<T> implements IQueue<T> {
   }
 
   toArray() {
-    return this.items.slice();
+    const newArray = [];
+    for (let i = 0; i < this.size; i++) {
+      const element = this.items[i];
+      if (element) {
+        newArray.push(element);
+      } else {
+        newArray.push(null);
+      }
+    }
+    return newArray;
   }
 }
