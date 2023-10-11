@@ -4,6 +4,7 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/utils";
 import { IStringReverseHandler } from "../../types/string";
+import { getStringReverseSteps, getLetterState } from "./utils";
 
 interface IStringReverseProps {
   inputString?: string;
@@ -20,6 +21,7 @@ export const StringReverse = React.forwardRef(
   (props: IStringReverseProps, ref: React.Ref<IStringReverseHandler>) => {
     const [letters, setLetters] = React.useState<TLetter[]>([]);
     const { inputString, onStart, onComplete } = props;
+    const [msDelay, setDelay] = React.useState(500);
 
     React.useEffect(() => {
       if (!inputString) {
@@ -50,44 +52,36 @@ export const StringReverse = React.forwardRef(
     };
 
     const reverse = async () => {
+      if (!inputString) {
+        return;
+      }
       if (onStart) onStart();
-      let complete = false;
-      while (!complete) {
-        await delay(500);
-        complete = cycleReverse();
+      const steps = getStringReverseSteps(inputString);
+      await delay(msDelay);
+      setLetters(
+        inputString.split("").map((char, index) => {
+          return {
+            letter: char,
+            state:
+              index === 0 || index === inputString.length - 1
+                ? ElementStates.Changing
+                : ElementStates.Default,
+          };
+        }),
+      );
+      for (let i = 0; i < steps.length; i++) {
+        await delay(msDelay);
+        const chars = steps[i];
+        setLetters(
+          chars.map((char, index) => {
+            return {
+              letter: char,
+              state: getLetterState(chars.length, index, i),
+            };
+          }),
+        );
       }
       if (onComplete) onComplete();
-    };
-
-    const cycleReverse = () => {
-      const chars = letters.slice();
-      const { length } = chars;
-      let index = 0;
-      while (index < length / 2) {
-        let firstIdx = index;
-        let lastIdx = length - 1 - index;
-        if (chars[firstIdx].state === ElementStates.Modified) {
-          index++;
-          continue;
-        }
-        if (chars[firstIdx].state === ElementStates.Changing) {
-          const temp = chars[lastIdx].letter;
-          chars[lastIdx].letter = chars[firstIdx].letter;
-          chars[firstIdx].letter = temp;
-          chars[firstIdx].state = ElementStates.Modified;
-          chars[lastIdx].state = ElementStates.Modified;
-          setLetters(chars);
-          return false;
-        }
-        if (chars[firstIdx].state === ElementStates.Default) {
-          chars[firstIdx].state = ElementStates.Changing;
-          chars[lastIdx].state = ElementStates.Changing;
-          setLetters(chars);
-          return false;
-        }
-      }
-      setLetters(chars);
-      return true;
     };
 
     React.useImperativeHandle(ref, () => ({

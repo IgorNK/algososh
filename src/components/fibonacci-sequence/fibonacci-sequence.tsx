@@ -3,6 +3,7 @@ import styles from "./fibonacci-sequence.module.css";
 import { Circle } from "../ui/circle/circle";
 import { delay } from "../../utils/utils";
 import { IFibonacciSequenceHandler } from "../../types/fibonacci";
+import { fibonacciStep } from "./utils";
 
 interface IFibonacciSequenceProps {
   inputAmount: number;
@@ -42,37 +43,35 @@ export const FibonacciSequence = React.forwardRef(
     const calculate = async () => {
       if (onStart) onStart();
       let complete = false;
-      let processedNums = [] as TNumber[];
+      let sequence: number[] = [];
       while (!complete) {
         await delay(500);
-        const { nums, result } = cycleSequence(processedNums);
-        processedNums = nums.slice();
+        const { nums, result } = cycleSequence(sequence, inputAmount + 1);
+        sequence = nums.slice();
         complete = result;
-        setNumbers(processedNums);
+        setNumbers(updateNumberElements(sequence));
       }
       if (onComplete) onComplete();
     };
 
     const cycleSequence = (
-      nums: TNumber[],
-    ): { nums: TNumber[]; result: boolean } => {
-      const { length } = nums;
-      if (length < 2) {
-        const newNumber = { number: 1, tail: length } as TNumber;
-        nums.push(newNumber);
+      nums: number[],
+      sequenceLength: number,
+    ): { nums: number[]; result: boolean } => {
+      let sequenceStep = fibonacciStep(nums);
+      let result = false;
+      if (sequenceStep.length === sequenceLength) {
+        result = true;
       } else {
-        const newNumber = {
-          number: nums[length - 2].number + nums[length - 1].number,
-          tail: length,
-        } as TNumber;
-        nums.push(newNumber);
+        result = false;
       }
-      if (length === inputAmount) {
-        return { nums: nums, result: true };
-      } else {
-        setNumbers(nums);
-        return { nums: nums, result: false };
-      }
+      return { nums: sequenceStep, result };
+    };
+
+    const updateNumberElements = (nums: number[]): TNumber[] => {
+      return nums.map((value, index) => {
+        return { number: value, tail: index };
+      });
     };
 
     React.useImperativeHandle(ref, () => ({

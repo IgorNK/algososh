@@ -5,6 +5,12 @@ import { Direction } from "../../types/direction";
 import { SortMethod, ISortingArrayHandler } from "../../types/sorting";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/utils";
+import {
+  getSortBubbleSteps,
+  getSortSelectionSteps,
+  getElementStateBubble,
+  getElementStateSelection,
+} from "./utils";
 
 interface ISortingArray {
   inputValues: number[];
@@ -21,6 +27,7 @@ type TNumber = {
 export const SortingArray = React.forwardRef(
   (props: ISortingArray, ref: React.Ref<ISortingArrayHandler>) => {
     const [numbers, setNumbers] = React.useState<TNumber[]>([]);
+    const [msDelay, setDelay] = React.useState(100);
     const { inputValues, sortMethod, onStart, onComplete } = props;
 
     React.useEffect(() => {
@@ -35,206 +42,80 @@ export const SortingArray = React.forwardRef(
       }
     }, [inputValues]);
 
-    const resetNumbers = () => {
+    const resetNumbers = (numbers: TNumber[], state: ElementStates) => {
       const newNums = numbers.slice();
-      newNums.forEach((num) => (num.state = ElementStates.Default));
+      newNums.forEach((num) => (num.state = state));
       setNumbers(newNums);
     };
 
     const sortAscending = async () => {
       if (onStart) onStart();
-      await startAnimation(Direction.Ascending, sortMethod);
+      await startAnimation(inputValues, Direction.Ascending, sortMethod);
       if (onComplete) onComplete();
     };
 
     const sortDescending = async () => {
       if (onStart) onStart();
-      startAnimation(Direction.Descending, sortMethod);
+      await startAnimation(inputValues, Direction.Descending, sortMethod);
       if (onComplete) onComplete();
     };
 
     const startAnimation = async (
+      inputValues: number[],
       sortDirection: Direction,
       sortMethod: SortMethod,
     ) => {
-      resetNumbers();
-      let complete = false;
-      let processedNums = numbers.slice();
-      let prevStart = 0;
-      let prevCmp = 0;
-      let currMaxInd = 0;
-      let bubbleStart = 0;
-      let bubbleEnd = numbers.length - 1;
-      while (!complete) {
-        await delay(100);
-        if (sortMethod === SortMethod.Selection) {
-          const { nums, result, currentStart, currentCmp, maxInd } =
-            cycleSortSelection(
-              processedNums,
-              sortDirection,
-              prevStart,
-              prevCmp,
-              currMaxInd,
-            );
-          currMaxInd = maxInd;
-          prevStart = currentStart;
-          prevCmp = currentCmp;
-          processedNums = nums.slice();
-          complete = result;
+      resetNumbers(numbers, ElementStates.Default);
+      let steps: Array<Array<number>>;
+      switch (sortMethod) {
+        case SortMethod.Bubble: {
+          steps = getSortBubbleSteps(inputValues, sortDirection);
+          break;
         }
-        if (sortMethod === SortMethod.Bubble) {
-          const { nums, result, start, end } = cycleSortBubble(
-            processedNums,
-            sortDirection,
-            bubbleStart,
-            bubbleEnd,
-          );
-          processedNums = nums.slice();
-          bubbleStart = start;
-          bubbleEnd = end;
-          complete = result;
+        case SortMethod.Selection: {
+          steps = getSortSelectionSteps(inputValues, sortDirection);
+          break;
         }
-        setNumbers(processedNums);
+        default:
+          return;
       }
-    };
-
-    const cycleSortSelection = (
-      nums: TNumber[],
-      sortDirection: Direction,
-      currentStart: number,
-      currentCmp: number,
-      maxInd: number,
-    ): {
-      nums: TNumber[];
-      result: boolean;
-      currentStart: number;
-      currentCmp: number;
-      maxInd: number;
-    } => {
-      let { length } = nums;
-      let newStart = currentStart;
-      let newCmp = currentCmp;
-      let newMaxInd = maxInd;
-
-      if (newCmp === newStart) {
-        newCmp++;
-      }
-
-      if (newStart >= length - 1) {
-        nums[newStart].state = ElementStates.Modified;
-        return {
-          nums,
-          result: true,
-          currentStart: newStart,
-          currentCmp: newCmp,
-          maxInd: newMaxInd,
-        };
-      }
-
-      if (nums[newStart].state === ElementStates.Default) {
-        nums[newStart].state = ElementStates.Changing;
-      }
-
-      if (nums[newCmp].state === ElementStates.Changing) {
-        nums[newCmp].state = ElementStates.Default;
-        newCmp++;
-      }
-
-      if (newCmp >= length) {
-        swap(nums, newStart, newMaxInd);
-        nums[newStart].state = ElementStates.Modified;
-        newStart++;
-        newCmp = newStart + 1;
-        newMaxInd = newStart;
-        return {
-          nums,
-          result: false,
-          currentStart: newStart,
-          currentCmp: newCmp,
-          maxInd: newMaxInd,
-        };
-      }
-
-      if (nums[newCmp].state === ElementStates.Default) {
-        nums[newCmp].state = ElementStates.Changing;
-        if (nums[newCmp].index > nums[newMaxInd].index) {
-          if (sortDirection === Direction.Descending) {
-            newMaxInd = newCmp;
+      let pass = 0;
+      let counter = 1;
+      let last = steps[0].length - 1;
+      let newNumbers: TNumber[] = [];
+      for (let i = 0; i < steps.length; i++) {
+        await delay(msDelay);
+        const stepNumbers = steps[i];
+        newNumbers = stepNumbers.map((value, index) => {
+          let state: ElementStates;
+          switch (sortMethod) {
+            case SortMethod.Bubble: {
+              state = getElementStateBubble(index, last, counter);
+              break;
+            }
+            case SortMethod.Selection: {
+              state = getElementStateSelection(index, pass, counter);
+              break;
+            }
+            default: {
+              state = ElementStates.Default;
+            }
           }
+          return {
+            index: value,
+            state,
+          };
+        });
+        if (counter === last) {
+          last--;
+          counter = 0;
+          pass++;
         }
-        if (nums[newCmp].index < nums[newMaxInd].index) {
-          if (sortDirection === Direction.Ascending) {
-            newMaxInd = newCmp;
-          }
-        }
-        return {
-          nums,
-          result: false,
-          currentStart: newStart,
-          currentCmp: newCmp,
-          maxInd: newMaxInd,
-        };
+        counter++;
+        setNumbers(newNumbers.slice());
       }
-
-      return {
-        nums,
-        result: false,
-        currentStart: newStart,
-        currentCmp: newCmp,
-        maxInd: newMaxInd,
-      };
-    };
-
-    const swap = (arr: TNumber[], firstIndex: number, secondIndex: number) => {
-      const temp = arr[firstIndex].index;
-      arr[firstIndex].index = arr[secondIndex].index;
-      arr[secondIndex].index = temp;
-    };
-
-    const cycleSortBubble = (
-      nums: TNumber[],
-      sortDirection: Direction,
-      start: number,
-      end: number,
-    ): { nums: TNumber[]; result: boolean; start: number; end: number } => {
-      let newStart = start;
-      let newEnd = end;
-      if (newEnd < 1) {
-        nums[newEnd].state = ElementStates.Modified;
-        return { nums, result: true, start: newStart, end: newEnd };
-      }
-
-      nums[newStart].state = ElementStates.Changing;
-      nums[newStart + 1].state = ElementStates.Changing;
-
-      if (nums[newStart].index > nums[newStart + 1].index) {
-        if (sortDirection === Direction.Ascending) {
-          swap(nums, newStart, newStart + 1);
-        }
-      }
-      if (nums[newStart].index < nums[newStart + 1].index) {
-        if (sortDirection === Direction.Descending) {
-          swap(nums, newStart, newStart + 1);
-        }
-      }
-
-      if (newStart + 1 >= newEnd) {
-        nums[newStart + 1].state = ElementStates.Modified;
-        nums[newStart].state = ElementStates.Default;
-        if (newStart > 0) {
-          nums[newStart - 1].state = ElementStates.Default;
-        }
-        newEnd--;
-        newStart = -1;
-      }
-
-      if (newStart > 0) {
-        nums[newStart - 1].state = ElementStates.Default;
-      }
-
-      newStart++;
-
-      return { nums, result: false, start: newStart, end: newEnd };
+      await delay(msDelay);
+      resetNumbers(newNumbers, ElementStates.Modified);
     };
 
     const renderColumns = () => {
