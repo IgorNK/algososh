@@ -1,0 +1,9 @@
+.inputSection {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: min-content min-content;
+  column-gap: 12px;
+  justify-items: start;
+  max-width: 522px;
+}
