@@ -41,7 +41,7 @@ export const StringComponent: React.FC = () => {
         />
         <Button
           text="Развернуть"
-          disabled={isProcessing}
+          disabled={isProcessing || inputText === ""}
           onClick={onReverseClick}
           isLoader={isProcessing}
         />
