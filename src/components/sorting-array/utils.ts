@@ -12,6 +12,14 @@ export const getSortBubbleSteps = (
   direction: Direction,
 ): number[][] => {
   const steps = Array<Array<number>>();
+  if (array.length === 0) {
+    steps.push([]);
+    return steps;
+  }
+  if (array.length === 1) {
+    steps.push([array[0]]);
+    return steps;
+  }
   const nums = array.slice();
   let start = 0;
   let end = nums.length - 1;
@@ -44,6 +52,14 @@ export const getSortSelectionSteps = (
   direction: Direction,
 ): number[][] => {
   const steps = Array<Array<number>>();
+  if (array.length === 0) {
+    steps.push([]);
+    return steps;
+  }
+  if (array.length === 1) {
+    steps.push([array[0]]);
+    return steps;
+  }
   const nums = array.slice();
   let { length } = nums;
   let start = 0;

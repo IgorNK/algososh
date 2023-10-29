@@ -1,6 +1,9 @@
 import { ElementStates } from "../../types/element-states";
 
 export const getStringReverseSteps = (inputString: string): string[][] => {
+  if (inputString === "") {
+    return [[]];
+  }
   const steps = Array<Array<string>>();
   const chars = inputString.split("");
   const { length } = chars;
