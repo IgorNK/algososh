@@ -1,6 +1,6 @@
 describe("app works correctly with routes", function() {
   before(function() {
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
   });
 
   it("should open front page /algososh by default", function() {
