@@ -28,10 +28,32 @@
 // declare global {
 //   namespace Cypress {
 //     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+//       getBySel(
+//         subject: string,
+//         selector: string,
+//         args?: Partial<string>,
+//       ): Chainable<Element>;
+//       // login(email: string, password: string): Chainable<void>
+//       // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+//       // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+//       // visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
 //     }
 //   }
 // }
+//
+
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+  return cy.get(`[data-cy=${selector}]`, ...args);
+});
+
+Cypress.Commands.add(
+  "getChildBySel",
+  { prevSubject: "element" },
+  (subject: string, selector, ...args) => {
+    if (subject) {
+      return cy.wrap(subject).children(`[data-cy=${selector}]`, ...args);
+    } else {
+      return cy.get(`[data-cy=${selector}]`, ...args);
+    }
+  },
+);
