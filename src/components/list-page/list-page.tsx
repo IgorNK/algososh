@@ -61,6 +61,7 @@ export const ListPage: React.FC = () => {
     <SolutionLayout title="Связный список">
       <form className={styles.inputSection} onSubmit={onAddHeadClick}>
         <Input
+          data-cy="input-value"
           extraClass={styles.valueInput}
           maxLength={4}
           placeholder={"Введите значение"}
@@ -71,20 +72,23 @@ export const ListPage: React.FC = () => {
           }
         />
         <Button
+          data-cy="button-add-to-head"
           extraClass={styles.addHead}
           text={"Добавить в head"}
           onClick={onAddHeadClick}
-          disabled={isProcessing}
+          disabled={isProcessing || inputValue === ""}
           isLoader={isProcessing}
         />
         <Button
+          data-cy="button-add-to-tail"
           extraClass={styles.addTail}
           text={"Добавить в tail"}
           onClick={onAddTailClick}
-          disabled={isProcessing}
+          disabled={isProcessing || inputValue === ""}
           isLoader={isProcessing}
         />
         <Button
+          data-cy="button-remove-from-head"
           extraClass={styles.removeHead}
           text={"Удалить из head"}
           onClick={onRemoveHeadClick}
@@ -92,6 +96,7 @@ export const ListPage: React.FC = () => {
           isLoader={isProcessing}
         />
         <Button
+          data-cy="button-remove-from-tail"
           extraClass={styles.removeTail}
           text={"Удалить из tail"}
           onClick={onRemoveTailClick}
@@ -99,6 +104,7 @@ export const ListPage: React.FC = () => {
           isLoader={isProcessing}
         />
         <Input
+          data-cy="input-index"
           extraClass={styles.indexInput}
           maxLength={2}
           type={"number"}
@@ -109,13 +115,15 @@ export const ListPage: React.FC = () => {
           }
         />
         <Button
+          data-cy="button-add-by-index"
           extraClass={styles.addIndex}
           text={"Добавить по индексу"}
           onClick={onAddByIndexClick}
-          disabled={isProcessing}
+          disabled={isProcessing || inputValue === "" || inputIndex === ""}
           isLoader={isProcessing}
         />
         <Button
+          data-cy="button-delete-by-index"
           extraClass={styles.removeIndex}
           text={"Удалить по индексу"}
           onClick={onRemoveByIndexClick}

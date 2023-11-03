@@ -55,7 +55,7 @@ export const QueuePage: React.FC = () => {
         <Button
           text={"Добавить"}
           onClick={onAddClick}
-          disabled={isProcessing}
+          disabled={isProcessing || inputText === ""}
           isLoader={isProcessing}
           extraClass="ml-6"
         />

@@ -262,7 +262,7 @@ export const LinkedListDisplay = React.forwardRef(
     }));
 
     return (
-      <div className={styles.list}>{renderListElements(listElements)}</div>
+      <div className={styles.list} data-cy="elements">{renderListElements(listElements)}</div>
     );
   },
 );

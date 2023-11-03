@@ -11,11 +11,14 @@ export const StringComponent: React.FC = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const stringRef = React.useRef<IStringReverseHandler>(null);
 
-  const onReverseClick = React.useCallback((e) => {
-    if (stringRef.current) {
-      stringRef.current.reverse();
-    }
-  }, []);
+  const onReverseClick = React.useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (stringRef.current) {
+        stringRef.current.reverse();
+      }
+    },
+    [],
+  );
 
   const onProcessingStart = () => {
     setIsProcessing(true);
@@ -26,7 +29,7 @@ export const StringComponent: React.FC = () => {
   };
 
   return (
-    <SolutionLayout title='Строка'>
+    <SolutionLayout title="Строка">
       <div className={styles.inputSection}>
         <Input
           maxLength={11}
@@ -37,8 +40,8 @@ export const StringComponent: React.FC = () => {
           }
         />
         <Button
-          text='Развернуть'
-          disabled={isProcessing}
+          text="Развернуть"
+          disabled={isProcessing || inputText === ""}
           onClick={onReverseClick}
           isLoader={isProcessing}
         />

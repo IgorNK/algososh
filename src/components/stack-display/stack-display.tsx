@@ -93,7 +93,9 @@ export const StackDisplay = React.forwardRef(
     }));
 
     return (
-      <div className={styles.stack}>{renderStackElements(stackElements)}</div>
+      <div className={styles.stack} data-cy="elements">
+        {renderStackElements(stackElements)}
+      </div>
     );
   },
 );

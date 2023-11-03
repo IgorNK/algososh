@@ -111,7 +111,7 @@ export const QueueDisplay = React.forwardRef(
     }));
 
     return (
-      <div className={styles.queue}>{renderQueueElements(queueElements)}</div>
+      <div className={styles.queue} data-cy="elements">{renderQueueElements(queueElements)}</div>
     );
   },
 );

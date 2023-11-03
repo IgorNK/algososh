@@ -23,20 +23,19 @@ export const Circle: React.FC<CircleProps> = ({
   isSmall,
 }) => {
   return (
-    <div className={`${styles.content} ${extraClass}`}>
+    <div className={`${styles.content} ${extraClass}`} data-cy="circle">
       <div
-        className={`text text_type_input text_color_input mb-4 ${
-          styles.absolute
-        } ${styles.head} ${
-          styles[typeof head === "string" ? "string" : "element"]
-        }`}
+        className={`text text_type_input text_color_input mb-4 ${styles.absolute
+          } ${styles.head} ${styles[typeof head === "string" ? "string" : "element"]
+          }`}
+        data-cy="head"
       >
         {head}
       </div>
       <div
-        className={`${styles.circle}  ${isSmall ? styles.small : ""} ${
-          styles[state]
-        }`}
+        className={`${styles.circle}  ${isSmall ? styles.small : ""} ${styles[state]
+          }`}
+        data-cy="letter"
       >
         <p
           className={`text text_type_circle text_color_input ${styles.letter}`}
@@ -50,11 +49,10 @@ export const Circle: React.FC<CircleProps> = ({
         {index?.toString()}
       </p>
       <div
-        className={`text text_type_input text_color_input mt-4 ${
-          styles.absolute
-        } ${index?.toString() ? styles.tail60 : styles.tail30} ${
-          styles[typeof tail === "string" ? "string" : "element"]
-        }`}
+        className={`text text_type_input text_color_input mt-4 ${styles.absolute
+          } ${index?.toString() ? styles.tail60 : styles.tail30} ${styles[typeof tail === "string" ? "string" : "element"]
+          }`}
+        data-cy="tail"
       >
         {tail}
       </div>

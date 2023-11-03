@@ -88,6 +88,10 @@ export const StringReverse = React.forwardRef(
       reverse,
     }));
 
-    return <div className={styles.letters}>{renderLetters(letters)}</div>;
+    return (
+      <div className={styles.letters} data-cy="letters">
+        {renderLetters(letters)}
+      </div>
+    );
   },
 );

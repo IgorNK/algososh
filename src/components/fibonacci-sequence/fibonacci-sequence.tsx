@@ -78,6 +78,10 @@ export const FibonacciSequence = React.forwardRef(
       calculate,
     }));
 
-    return <div className={styles.numbers}>{renderNumbers(numbers)}</div>;
+    return (
+      <div className={styles.numbers} data-cy="numbers">
+        {renderNumbers(numbers)}
+      </div>
+    );
   },
 );

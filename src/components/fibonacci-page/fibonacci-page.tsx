@@ -45,7 +45,7 @@ export const FibonacciPage: React.FC = () => {
         />
         <Button
           text="Рассчитать"
-          disabled={isProcessing}
+          disabled={isProcessing || inputText === ""}
           isLoader={isProcessing}
           onClick={onCalculateClick}
         />
