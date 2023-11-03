@@ -3,9 +3,11 @@
 exports[`Circle with JSX-element in head is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   >
     <div
       id="Test Element"
@@ -13,6 +15,7 @@ exports[`Circle with JSX-element in head is rendered correctly 1`] = `
   </div>
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -23,6 +26,7 @@ exports[`Circle with JSX-element in head is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -30,12 +34,15 @@ exports[`Circle with JSX-element in head is rendered correctly 1`] = `
 exports[`Circle with JSX-element in tail is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -46,6 +53,7 @@ exports[`Circle with JSX-element in tail is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   >
     <div
       id="Test Element"
@@ -57,14 +65,17 @@ exports[`Circle with JSX-element in tail is rendered correctly 1`] = `
 exports[`Circle with head is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head string"
+    data-cy="head"
   >
     A
   </div>
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -75,6 +86,7 @@ exports[`Circle with head is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -82,12 +94,15 @@ exports[`Circle with head is rendered correctly 1`] = `
 exports[`Circle with letters is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -100,6 +115,7 @@ exports[`Circle with letters is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -107,12 +123,15 @@ exports[`Circle with letters is rendered correctly 1`] = `
 exports[`Circle with prop isSmall === true is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle  small default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -123,6 +142,7 @@ exports[`Circle with prop isSmall === true is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -130,12 +150,15 @@ exports[`Circle with prop isSmall === true is rendered correctly 1`] = `
 exports[`Circle with state prop set as Changing is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   changing"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -146,6 +169,7 @@ exports[`Circle with state prop set as Changing is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -153,12 +177,15 @@ exports[`Circle with state prop set as Changing is rendered correctly 1`] = `
 exports[`Circle with state prop set as Default is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -169,6 +196,7 @@ exports[`Circle with state prop set as Default is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -176,12 +204,15 @@ exports[`Circle with state prop set as Default is rendered correctly 1`] = `
 exports[`Circle with state prop set as Modified is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   modified"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -192,6 +223,7 @@ exports[`Circle with state prop set as Modified is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
@@ -199,12 +231,15 @@ exports[`Circle with state prop set as Modified is rendered correctly 1`] = `
 exports[`Circle with tail is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -215,6 +250,7 @@ exports[`Circle with tail is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 string"
+    data-cy="tail"
   >
     A
   </div>
@@ -224,12 +260,15 @@ exports[`Circle with tail is rendered correctly 1`] = `
 exports[`Circle without letters is rendered correctly 1`] = `
 <div
   className="content "
+  data-cy="circle"
 >
   <div
     className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
   />
   <div
     className="circle   default"
+    data-cy="letter"
   >
     <p
       className="text text_type_circle text_color_input letter"
@@ -240,6 +279,7 @@ exports[`Circle without letters is rendered correctly 1`] = `
   />
   <div
     className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
   />
 </div>
 `;
